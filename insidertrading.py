@@ -13,6 +13,7 @@ def getinsiders(numpages):
     stocklist = []
     insiderlist=[]
     costlist=[]
+    pricelist=[]
     chrome_path = r"C:\Users\u15866\OneDrive - Kimberly-Clark\chromedriver.exe"
     driver = webdriver.Chrome(chrome_path)
     URL = "https://www.gurufocus.com/insider/summary"
@@ -35,15 +36,19 @@ def getinsiders(numpages):
             cost = driver.find_element_by_xpath("""//*[@id="wrapper"]/div/table/tbody/tr["""+str(i)+"""]/td[12]""")
             costlist.append(cost.text)
         
+        for i in range(1,41):
+            price = driver.find_element_by_xpath("""//*[@id="wrapper"]/div/table/tbody/tr["""+str(i)+"""]/td[4]/span""")
+            pricelist.append(price.text)
+
         counter+=1
         nextbutton = driver.find_element_by_xpath("""//*[@id="components-root"]/div/section/main/div[7]/div/button[2]/i""")
         nextbutton.click()
 
     driver.close()
-    intrades = list(zip(stocklist,insiderlist,costlist))
+    intrades = list(zip(stocklist,insiderlist,costlist,pricelist))
 #    print(intrades)
     
-    df = pd.DataFrame(intrades, columns = ['ticker', 'position', 'position size'])
+    df = pd.DataFrame(intrades, columns = ['ticker', 'position', 'position size','price'])
     
     for index, row in df.iterrows():
         if "C" in row['position']:
@@ -51,15 +56,10 @@ def getinsiders(numpages):
             psize = psize.replace(",","")
             if float(psize) > 100_000:
                 print(row['ticker'], end=": ")
-                print(float(psize))
+                print("The "+row['position']+" spent "+psize + " at a price of "+row['price']+ " per share")
                 print("\n")
                 
-            
-
-    
-        
-        
-    
+               
 
 
-getinsiders(10)  
+getinsiders(1)  
