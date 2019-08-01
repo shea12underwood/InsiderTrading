@@ -15,6 +15,7 @@ def getinsiders(numpages):
     costlist=[]
     pricelist=[]
     sharepricelist=[]
+    datelist=[]
     chrome_path = r"C:\Users\u15866\OneDrive - Kimberly-Clark\chromedriver.exe"
     driver = webdriver.Chrome(chrome_path)
     URL = "https://www.gurufocus.com/insider/summary"
@@ -45,15 +46,19 @@ def getinsiders(numpages):
             shareprice = driver.find_element_by_xpath("""//*[@id="wrapper"]/div/table/tbody/tr["""+str(i)+"""]/td[11]""")
             sharepricelist.append(shareprice.text)
 
+        purchasedates = driver.find_elements_by_class_name("table-date-info")
+        for date in purchasedates:
+            datelist.append(date.text)
+
         counter+=1
         nextbutton = driver.find_element_by_xpath("""//*[@id="components-root"]/div/section/main/div[7]/div/button[2]/i""")
         nextbutton.click()
 
     driver.close()
-    intrades = list(zip(stocklist,insiderlist,costlist,pricelist,sharepricelist))
+    intrades = list(zip(stocklist,insiderlist,costlist,pricelist,sharepricelist,datelist))
 #    print(intrades)
     
-    df = pd.DataFrame(intrades, columns = ['ticker', 'position', 'position size','price','shareprice'])
+    df = pd.DataFrame(intrades, columns = ['ticker', 'position', 'position size','price','shareprice','date'])
     
     for index, row in df.iterrows():
         if "C" in row['position']:
@@ -61,7 +66,7 @@ def getinsiders(numpages):
             psize = psize.replace(",","")
             if float(psize) > 100_000:
                 print(row['ticker'], end=": ")
-                print("The "+row['position']+" spent "+psize + " at a price of "+row['shareprice']+ " per share. " + row['ticker']+ " is now trading at " + row['price'] + " per share.")
+                print("On "+row['date'] + ", The "+row['position']+" spent "+psize + " at a price of "+row['shareprice']+ " per share. " + row['ticker']+ " is now trading at " + row['price'] + " per share.")
                 print("\n")
                 
                
