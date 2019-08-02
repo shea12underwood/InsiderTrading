@@ -42,7 +42,6 @@ def getBuys(numpages=1):
             datelist.append(date.text)
         
         counter +=1
-        print(positionlist)
 
     driver.close()
 
