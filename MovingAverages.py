@@ -40,32 +40,16 @@ def price2MA(alist):
                 continue
 
         try:
-            percent(tick,price.text,MA.text,Length)
+            utils.percent(tick,price.text,MA,Length)
             
         except:
             print("continued at percent" + tick)
             continue
-        df = dr.data.get_data_yahoo(tick,start = '2018-08-27', end = '2019-08-05')
-        df = df.reset_index()
-        df = utils.relative_strength_index(df,14)
-        df = utils.exponential_moving_average(df,180)
-        df = utils.moving_average(df,Lengthforcalc)
-        df = utils.macd(df,12,26)
+        df = utils.dfmanip(tick,Lengthforcalc)
         print(df[-5:])
 
     driver.close()
-def percent(Ticker, Price, MA, Length):
-    if MA == 'N/A':
-        movA = float(1)
-    else:
-        movA = float(MA)
-          
-    result = (float(Price) - movA) / movA * 100
-    if result > 0:
-        aorb = "above"
-    else:
-        aorb = "below"
-    print(Ticker +" is trading at " +str(round(result,2)).replace("-","")+"% " +aorb +" the "+ Length+" moving average")
+
 
 
 price2MA(alist)

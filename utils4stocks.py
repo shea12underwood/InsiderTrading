@@ -1,5 +1,6 @@
 import pandas as pd 
 import pandas_datareader as dr
+from datetime import date, timedelta
 
 def moving_average(df, n):
     """Calculate the moving average for the given data.
@@ -8,7 +9,7 @@ def moving_average(df, n):
     :param n: 
     :return: pandas.DataFrame
     """
-    MA = pd.Series(df['Close'].rolling(n, min_periods=n).mean(), name='MA_' + str(n))
+    MA = pd.Series(df['Close'].rolling(n, min_periods=n).mean(), name='MA')
     df = df.join(MA)
     return df
 
@@ -73,8 +74,32 @@ def relative_strength_index(df, n):
     df = df.join(RSI)
     return df
 
+def percent(Ticker, Price, MA, Length):
+    # if MA.text == 'N/A':
+    #     movA = float(1)
+    # else:
+    #     movA = float(MA.text)
+          
+    result = (Price - MA) / MA * 100
+    if result > 0:
+        aorb = "above"
+    else:
+        aorb = "below"
+    print(Ticker +" is trading at " +str(round(result,2)).replace("-","")+"% " +aorb +" the "+ Length+" moving average")
+
+def dfmanip(tick,Lengthforcalc):   
+    df = dr.data.get_data_yahoo(tick,start = date.today() - timedelta(300) , end = date.today())
+    df = df.reset_index()
+    df = relative_strength_index(df,14)
+    df = exponential_moving_average(df,180)
+    df = moving_average(df,Lengthforcalc)
+    df = macd(df,12,26)
+    return df
+
 if __name__ == "__main__":
     moving_average()
     exponential_moving_average()
     macd()
     relative_strength_index()
+    percent()
+    dfmanip()
