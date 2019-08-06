@@ -9,7 +9,7 @@ def moving_average(df, n):
     :param n: 
     :return: pandas.DataFrame
     """
-    MA = pd.Series(df['Close'].rolling(n, min_periods=n).mean(), name='MA')
+    MA = pd.Series(df['Close'].rolling(n, min_periods=0).mean(), name='MA')
     df = df.join(MA)
     return df
 
@@ -32,8 +32,8 @@ def macd(df, n_fast, n_slow):
     :param n_slow: 
     :return: pandas.DataFrame
     """
-    EMAfast = pd.Series(df['Close'].ewm(span=n_fast, min_periods=n_slow).mean())
-    EMAslow = pd.Series(df['Close'].ewm(span=n_slow, min_periods=n_slow).mean())
+    EMAfast = pd.Series(df['Close'].ewm(span=n_fast, min_periods=0).mean())
+    EMAslow = pd.Series(df['Close'].ewm(span=n_slow, min_periods=0).mean())
     MACD = pd.Series(EMAfast - EMAslow, name='MACD_' + str(n_fast) + '_' + str(n_slow))
     MACDsign = pd.Series(MACD.ewm(span=9, min_periods=9).mean(), name='MACDsign_' + str(n_fast) + '_' + str(n_slow))
     MACDdiff = pd.Series(MACD - MACDsign, name='MACDdiff_' + str(n_fast) + '_' + str(n_slow))
