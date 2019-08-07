@@ -88,12 +88,12 @@ def percent(Ticker, Price, MA, Length):
     print(Ticker +" is trading at " +str(round(result,2)).replace("-","")+"% " +aorb +" the "+ Length+" moving average")
 
 def dfmanip(tick,Lengthforcalc):   
-    df = dr.data.get_data_yahoo(tick,start = date.today() - timedelta(300) , end = date.today())
-    df = df.reset_index()
-    df = relative_strength_index(df,14)
+    df = dr.data.get_data_yahoo(tick,start = date.today() - timedelta(300) , end = date.today())  
     df = exponential_moving_average(df,180)
     df = moving_average(df,Lengthforcalc)
     df = macd(df,12,26)
+    df = df.reset_index()
+    df = relative_strength_index(df,14)
     return df
 
 if __name__ == "__main__":
