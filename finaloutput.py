@@ -5,11 +5,11 @@ import utils4stocks as utils
 
 # alist = Tr.getBuys()
 
-alist = ["ETRN"]
+alist = ["CLF","CARS"]
 returned = []
-holding = ["USAK","MTDR","ETRN","MMSI","BHR","UVE","ALGN"]
+holding = ["USAK","MTDR","ETRN","MMSI","BHR","UVE","ALGN","CARS"]
 regholdings = ["EDIT","CRON",'BBBY','CRSP',"KMB","GOOGL","CGC","SNAP","BYND","AMZN"]
-for tick in alist:
+for tick in holding:
     df = utils.dfmanip(tick,200)
     if df.shape[0] < 200:
         Length = str(df.shape[0]) + " day"
