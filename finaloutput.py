@@ -3,13 +3,13 @@ import pandas_datareader as dr
 import pandas as pd
 import utils4stocks as utils
 
-# alist = Tr.getBuys()
+alist = Tr.getBuys()
 
-alist = ["CLF","CARS"]
-returned = []
-holding = ["USAK","MTDR","ETRN","MMSI","BHR","UVE","ALGN","CARS"]
+# alist = ["MMSI","GHL","UVE"]
+returned = ["SWN","DXC","AINC"]
+holding = ["USAK","MTDR","ETRN","SWN","TEN","AXGN","ALGN","CARS","TXMD","GHL"]
 regholdings = ["EDIT","CRON",'BBBY','CRSP',"KMB","GOOGL","CGC","SNAP","BYND","AMZN"]
-for tick in holding:
+for tick in alist:
     df = utils.dfmanip(tick,200)
     if df.shape[0] < 200:
         Length = str(df.shape[0]) + " day"
@@ -20,6 +20,7 @@ for tick in holding:
     price = df.iloc[-1]['Close']
 
     utils.percent(tick,price,movingaverage,Length)
-    print(df[-2:], end = "\n\n")
+    if ((price - movingaverage) / movingaverage * 100) < -19.99:
+        print(df[-2:], end = "\n\n")
 
 
