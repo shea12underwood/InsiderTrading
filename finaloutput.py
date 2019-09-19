@@ -3,12 +3,8 @@ import pandas_datareader as dr
 import pandas as pd
 import utils4stocks as utils
 
-alist = Tr.getBuys()
+alist = Tr.getBuys() 
 
-# alist = ["MMSI","GHL","UVE"]
-returned = ["SWN","DXC","AINC"]
-holding = ["USAK","MTDR","ETRN","SWN","TEN","AXGN","ALGN","CARS","TXMD","GHL"]
-regholdings = ["EDIT","CRON",'BBBY','CRSP',"KMB","GOOGL","CGC","SNAP","BYND","AMZN"]
 for tick in alist:
     df = utils.dfmanip(tick,200)
     if df.shape[0] < 200:
